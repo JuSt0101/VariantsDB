@@ -33,3 +33,12 @@ for (i in 1:length(inputFiles)) {
   #write.table(x = tempTab, file = (paste0(tempDir,"VarsAll_54_TSO.csv")), sep = "\t", append = T, na = ".", quote = F, dec = ".", row.names = F, col.names = T)
 }
 dbDisconnect(con)
+
+#processing check
+fileList <- list.files(path = "/home/js/it/imid/ngs/data/vcf/temp")
+
+testSamples <- data.frame(
+  InputFiles = inputFiles,
+  SampleList = SampleID,
+  TempList = fileList,
+  stringsAsFactors = F)
