@@ -8,18 +8,18 @@ library(tidyr)
 
 #sciezki do folderów i plikow
 inputDir <- "/home/js/it/imid/ngs/data/vcf/input"
-inputFiles <- dir(inputDir, "*.vcf", full.names = TRUE)
+inputFiles <- dir(inputDir, "*.vcf", full.names = T)
 tempDir <- "/home/js/it/imid/ngs/data/vcf/temp/"
 
 # lista SampleID
-SampleID <- c(as.character(substr((dir(inputDir, "*.vcf", full.names = FALSE)), 1, 5))) #dopracowac!!
+SampleID <- c(as.character(substr((dir(inputDir, "*.vcf", full.names = F)), 1, 5))) #dopracowac!!
 
 # All Variants without annotations, loading into database
 # problematyczna kolumna INFO
 con <- dbConnect(MySQL(), user="root", password="root",dbname="MiSeqVarsDB", host="localhost")
 for (i in 1:length(inputFiles)) {
   tempTab = as.data.table(NULL)
-  tempTab = read.table(inputFiles[i], stringsAsFactors = FALSE, comment.char = "#", header = FALSE, fill = T)
+  tempTab = read.table(inputFiles[i], stringsAsFactors = F, comment.char = "#", header = F, fill = T)
   tempTab["V11"] <- SampleID[i]
   tempTab["V12"] <- paste(tempTab$V1,":", tempTab$V2, "_" , tempTab$V4, ">" , tempTab$V5, sep="")
   tempTab = tempTab[,c(11:12,1:2,4,5:6,3,7,10,8)]
