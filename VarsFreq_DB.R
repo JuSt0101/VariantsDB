@@ -3,11 +3,11 @@ library(data.table)
 library(gdata)
 library(sqldf)
 library(RMySQL)
-library(dplyr)
-library(tidyr)
+#library(dplyr)
+#library(tidyr)
 
 #sciezki do folderów i plikow
-inputDir <- "/home/mongos/NGS/data/output/ANNOVAR_output"
+inputDir <- "/home/jussota/ngs/data/annovar_output/"
 inputFiles <- dir(inputDir, "*.avoutput.hg19_multianno.txt", full.names = T)
 
 # lista SampleID
@@ -32,18 +32,24 @@ SampleID <- c(as.character(substr((dir(inputDir, "avoutput.hg19_multianno.txt", 
 [66] "V6"                      "V7"                      "V8"                      "V9"                      "V10"                    
 [71] "key" 
 
-con <- dbConnect(MySQL(), user="root", password="xxx",dbname="VarsFreq_temp", host="localhost")
+con <- dbConnect(MySQL(), user="root", password="",dbname="test", host="localhost")
+
 for (i in 1:length(inputFiles)) {
   tempTab = as.data.table(NULL)
-  tempTab = read.table(inputFiles[1], stringsAsFactors = F, header = T, fill = T, sep = "\t")
-  tempTab["V72"] <- SampleID[1]
+  tempTab = read.table(inputFiles[i], stringsAsFactors = F, header = T, fill = T, sep = "\t")
+  tempTab["V72"] <- SampleID[i]
   
   VarsFreqTab = tempTab[,c(72,71,67,58,1)]
   colnames(VarsFreqTab) <- c("SAMPLE_ID", "VAR_KEY", "FILTER", "ZYG", "CHROM")
   
   #insert data into DB
-  dbWriteTable(con, "TEMP_ALL_VARS", tempTab, row.name=F, append=T)
-  sampleDB <- dbReadTable(con, "TEMP_ALL_VARS")
+  #dbWriteTable(con, "TEMP_ALL_VARS", tempTab, row.name=F, append=T)
+  #sampleDB <- dbReadTable(con, "TEMP_ALL_VARS")
+  
+  dbWriteTable(con, "TEMP_FREQ_VARS", VarsFreqTab, row.name=F, append=T)
+  sampleDB <- dbReadTable(con, "TEMP_FREQ_VARS")
+  
   #write.table(x = tempTab, file = (paste0(tempDir,"VarsAll_54_TSO.csv")), sep = "\t", append = T, na = ".", quote = F, dec = ".", row.names = F, col.names = T)
 }
+
 dbDisconnect(con)
