@@ -32,7 +32,7 @@ SampleID <- c(as.character(substr((dir(inputDir, "avoutput.hg19_multianno.txt", 
 [66] "V6"                      "V7"                      "V8"                      "V9"                      "V10"                    
 [71] "key" 
 
-con <- dbConnect(MySQL(), user="root", password="root",dbname="VarsFreq_temp", host="localhost")
+con <- dbConnect(MySQL(), user="root", password="xxx",dbname="VarsFreq_temp", host="localhost")
 for (i in 1:length(inputFiles)) {
   tempTab = as.data.table(NULL)
   tempTab = read.table(inputFiles[1], stringsAsFactors = F, header = T, fill = T, sep = "\t")
