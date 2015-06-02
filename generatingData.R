@@ -51,7 +51,7 @@ setnames(var_sampleTab,"V72","sampleID")
 setnames(var_sampleTab,"key","variantID")
 
 ### VariantsDB: baza danych w MySQL
-con <- dbConnect(MySQL(), user="root", password="root", dbname="VariantsDB", host="localhost")
+con <- dbConnect(MySQL(), user="root", password="...", dbname="VarsDB", host="localhost")
 ### tabela "var_sample"
 dbSendQuery(con, 
     "CREATE TABLE IF NOT EXISTS `VariantsDB`.`var_sample` (
